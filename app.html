@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gerador de Orçamento</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<style>
+    #orcamentoForm{
+        position: absolute;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        top: 58px;
+    }
+    h1{
+        color: black;
+        top: 0px;
+        position: relative;
+    }
+</style>
+<body>
+  <h1>Orçamento</h1>
+  <form id="orcamentoForm">
+    <img src="transferir.png" alt="Logo da empresa" >
+    <label for="cliente">Cliente:</label>
+    <input type="text" id="cliente" name="cliente" required><br><br>
+
+    <label for="servico">Tipo de Serviço:</label>
+    <input type="text" id="servico" name="servico" required><br><br>
+
+    <button type="submit">Gerar Orçamento</button>
+  </form>
+
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    document.getElementById('orcamentoForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      const cliente = document.getElementById('cliente').value;
+      const servico = document.getElementById('servico').value;
+    
+      // Crie uma nova instância do jsPDF
+      const doc = new jsPDF();
+    
+      // Defina o tamanho da fonte padrão
+      const fontSizePadrao = 12;
+
+        
+      // Aumente a fonte para um local específico
+      const fontSizeAumentado = 18;
+
+    
+      // Adicione a imagem do logotipo ao PDF
+      const logo = new Image();
+      logo.src = 'transferir.png'; // Substitua pelo caminho do seu logotipo
+      doc.addImage(logo, 'PNG', 10, 10, 50, 30); // Ajuste as coordenadas e o tamanho conforme necessário
+    
+      // Posicione o texto com base no "top" da página
+      doc.setFontSize(fontSizeAumentado);
+      const topPosition = 30; // Ajuste a posição vertical conforme necessário
+      doc.text('ORÇAMENTO DE SERVIÇO', 70, topPosition);
+    
+      // Adicione informações fixas abaixo da imagem
+      doc.setFontSize(fontSizePadrao);
+      doc.text('Antonio Carlos Santos Gomes', 10, topPosition + 15); // Primeira linha
+      doc.text('Telefone/ Whatsapp: (11) 96355-4963', 10, topPosition + 20); // Segunda linha
+
+      // Adicione o texto com fonte aumentada
+
+      doc.text(`Cliente: ${cliente}`, 10, topPosition + 70);
+      doc.text(`Tipo de Serviço: ${servico}`, 10, topPosition + 80);
+    
+      // Salve o PDF
+      doc.save('orcamento.pdf');
+    });
+    
+  </script>
+</body>
+</html>
