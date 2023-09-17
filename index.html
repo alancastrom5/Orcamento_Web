@@ -2,22 +2,51 @@
 <html>
 <head>
   <title>Gerador de Orçamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<style>
-    #orcamentoForm{
-        position: absolute;
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
-        top: 58px;
-    }
+  <style>
     h1{
-        color: black;
-        top: 0px;
-        position: relative;
+      text-align: center;
     }
-</style>
+    #orcamentoForm{
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      flex-wrap: wrap;
+    }
+    /* Estilos para dispositivos móveis */
+    @media (max-width: 600px) {
+      body {
+        font-size: 16px; /* Ajuste o tamanho da fonte para dispositivos móveis */
+      }
+
+      label, input {
+        text-align: left; /* Alinhe os rótulos e campos de entrada à esquerda */
+      }
+      #orcamentoForm {
+        position: relative;
+        margin-top: 20px; /* Espaçamento superior para dispositivos móveis */
+      }
+
+      h1 {
+        font-size: 24px; /* Ajuste o tamanho da fonte para dispositivos móveis */
+        text-align: center; /* Centralize o título */
+      }
+
+      label, input, button {
+        width: 70%; /* Faça os elementos ocuparem a largura total */
+      }
+
+      label {
+        margin-bottom: 5px; /* Adicione espaço entre os rótulos */
+      }
+
+      input, button {
+        padding: 10px; /* Adicione espaço interno aos elementos de entrada e botão */
+      }
+    }
+  </style>
+</head>
 <body>
   <h1>Orçamento</h1>
   <form id="orcamentoForm">
@@ -30,6 +59,7 @@
 
     <button type="submit">Gerar Orçamento</button>
   </form>
+
 
   <script>
     const { jsPDF } = window.jspdf;
