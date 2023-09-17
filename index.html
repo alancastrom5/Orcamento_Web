@@ -77,67 +77,91 @@
   <form id="orcamentoForm">
     <img src="transferir.png" alt="Logo da empresa">
     <label for="cliente">Cliente:</label>
-    <input type="text" id="cliente" name="cliente" required><br><br>
+    <input type="text" id="cliente" name="cliente"><br><br>
+
+    <label for="telefone">Telefone:</label>
+    <input type="text" id="telefone" name="telefone"><br><br>
+
+    <label for="cpf">CPF:</label>
+    <input type="text" id="cpf" name="cpf"><br><br>
+    
+    <label for="endereco">Endereço:</label>
+    <input type="text" id="endereco" name="endereco"><br><br>
 
     <label for="servico">Tipo de Serviço:</label>
-    <input type="text" id="servico" name="servico" required><br><br>
+    <input type="text" id="servico" name="servico"><br><br>
 
     <label for="data">Data:</label>
-    <input type="text" id="data" name="data" required><br><br>
+    <input type="text" id="data" name="data"><br><br>
 
     <label for="previsaoEntrega">Previsão de Entrega:</label>
-    <input type="text" id="previsaoEntrega" name="previsaoEntrega" required><br><br>
+    <input type="text" id="previsaoEntrega" name="previsaoEntrega"><br><br>
 
     <button type="submit">Gerar Orçamento</button>
   </form>
 
-
   <script>
-   const { jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf;
 
-document.getElementById('orcamentoForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  
-  const cliente = document.getElementById('cliente').value;
-  const servico = document.getElementById('servico').value;
-  const previsaoEntrega = document.getElementById('previsaoEntrega').value;
-  const data = document.getElementById('data').value;
+    document.getElementById('orcamentoForm').addEventListener('submit', function (e) {
+      e.preventDefault();
 
-  // Crie uma nova instância do jsPDF
-  const doc = new jsPDF();
+      const cliente = document.getElementById('cliente').value;
+      const telefone = document.getElementById('telefone').value;
+      const cpf = document.getElementById('cpf').value;
+      const endereco = document.getElementById('endereco').value;
+      const servico = document.getElementById('servico').value;
+      const previsaoEntrega = document.getElementById('previsaoEntrega').value;
+      const data = document.getElementById('data').value;
 
-  // Defina o tamanho da fonte padrão
-  const fontSizePadrao = 12;
+      // Crie uma nova instância do jsPDF
+      const doc = new jsPDF();
 
-  // Aumente a fonte para um local específico
-  const fontSizeAumentado = 18;
+      // Defina o tamanho da fonte padrão
+      const fontSizePadrao = 12;
 
-  // Adicione a imagem do logotipo ao PDF
-  const logo = new Image();
-  logo.src = 'transferir.png'; // Substitua pelo caminho do seu logotipo
-  doc.addImage(logo, 'PNG', 10, 10, 50, 30); // Ajuste as coordenadas e o tamanho conforme necessário
+      // Aumente a fonte para um local específico
+      const fontSizeAumentado = 18;
 
-  // Posicione o texto com base no "top" da página
-  doc.setFontSize(fontSizeAumentado);
-  const topPosition = 30; // Ajuste a posição vertical conforme necessário
-  doc.text('ORÇAMENTO DE SERVIÇO', 70, topPosition);
+      // Adicione a imagem do logotipo ao PDF
+      const logo = new Image();
+      logo.src = 'transferir.png'; // Substitua pelo caminho do seu logotipo
+      doc.addImage(logo, 'PNG', 10, 10, 50, 30); // Ajuste as coordenadas e o tamanho conforme necessário
 
-  // Adicione as datas ao PDF
-  doc.setFontSize(fontSizePadrao);
-  doc.text(`Previsão de Entrega: ${previsaoEntrega}`,140, topPosition + 20);
-  doc.text(`Data: ${data}`,140, topPosition + 15);
+      // Posicione o texto com base no "top" da página
+      doc.setFontSize(fontSizeAumentado);
+      const topPosition = 30; // Ajuste a posição vertical conforme necessário
+      doc.text('ORÇAMENTO DE SERVIÇO', 70, topPosition);
 
-  // Adicione informações fixas abaixo da imagem
+      // Adicione as datas ao PDF
+      doc.setFontSize(fontSizePadrao);
+      if (previsaoEntrega) {
+        doc.text(`Previsão de Entrega: ${previsaoEntrega}`, 140, topPosition + 20);
+      }
+      if (data) {
+        doc.text(`Data: ${data}`, 140, topPosition + 15);
+      }
+
+      // Adicione informações fixas abaixo da imagem
   doc.text('Antonio Carlos Santos Gomes', 10, topPosition + 15); // Primeira linha
-  doc.text('Telefone/ Whatsapp: (11) 96355-4963', 10, topPosition + 20); // Segunda linha
+      doc.text('Telefone/ Whatsapp: (11) 96355-4963', 10, topPosition + 20); // // Primeira linha
+      if (telefone) {
+        doc.text(`Telefone: ${telefone}`, 10, topPosition + 58); // Segunda linha
+      }
+      if (cpf) {
+        doc.text(`CPF: ${cpf}`, 10, topPosition + 50); // Terceira linha
+      }
+      if (endereco) {
+        doc.text(`Endereço: ${endereco}`, 10, topPosition + 66); // Quarta linha
+      }
 
-  // Adicione o texto com fonte aumentada
-  doc.text(`Cliente: ${cliente}`, 10, topPosition + 70);
-  doc.text(`Tipo de Serviço: ${servico}`, 10, topPosition + 80);
+      // Adicione o texto com fonte aumentada
+      doc.text(`Cliente: ${cliente}`, 10, topPosition + 42);
+      doc.text(`Tipo de Serviço: ${servico}`, 10, topPosition + 100);
 
-  // Salve o PDF
-  doc.save('orcamento.pdf');
-});
+      // Salve o PDF
+      doc.save('orcamento.pdf');
+    });
 
   </script>
 </body>
