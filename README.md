@@ -3,3 +3,5 @@
 ## Gerador de Orcamentos web
 
 Preenchendo as informacoes do orcamento na pagina web, ele gera um pdf personalizado.
+
+tecnologias ultilizadas, html, css e javascript.
