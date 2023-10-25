@@ -4,6 +4,7 @@
   <title>Orçamento</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/jspdf-autotable@3.7.0/dist/jspdf.plugin.autotable.js"></script>
   <link rel="manifest" href="manifest.json">
 
   <style>
@@ -116,6 +117,7 @@
   <script>
     const { jsPDF } = window.jspdf;
 
+
     document.getElementById('orcamentoForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -190,60 +192,42 @@
 
       doc.setFontSize(fontSizeAumentado);
       const servicos = servico.split(',');
-
-      // Adicione a lista de serviços
-      if (servicos.length > 0) {
-        doc.text('Serviços:', 10, topPosition + 100);
-        for (let i = 0; i < servicos.length; i++) {
-          doc.setFontSize(fontSizePadrao);
-          doc.text(servicos[i], 10, topPosition + 110 + i * 8);
+      const tableX = 10; // Posição X inicial da tabela
+      const tableY = topPosition + 100; // Posição Y inicial da tabela
+      doc.setFontSize(fontSizeAumentado);
+      const columns = ['Materias/ Medida'];
+      
+      const rows = [];
+      
+      for (let i = 0; i < servicos.length; i++) {
+        const service = servicos[i].trim();
+      
+        if (service) {
+          const parts = service.split(',');
+      
+          const serviceName = parts[0] || '';
+      
+          rows.push([serviceName]);
         }
       }
-
-      // Salve o PDF
+      
+      doc.setFontSize(fontSizeAumentado);
+      doc.text('Serviços:', 10, topPosition + 90);
+      
+      doc.autoTable({
+        startY: topPosition + 100,
+        head: [columns],
+        body: rows,
+        theme: 'grid',
+        columnStyles: {
+          0: { cellWidth: 120 },
+        },
+      });
+      
       doc.save('orcamento.pdf');
     });
 
   </script>
 
-  <script type="text/javascript">
-    const CACHE_NAME = 'orcamento-app-cache-v1';
-    const urlsToCache = [
-      'index.html',
-      'transferir.png', // Inclua todos os recursos que você deseja armazenar em cache aqui
-      // Adicione mais URLs de recursos que seu aplicativo usa
-    ];
-    
-    self.addEventListener('install', function (event) {
-      event.waitUntil(
-        caches.open(CACHE_NAME)
-          .then(function (cache) {
-            return cache.addAll(urlsToCache);
-          })
-      );
-    });
-    
-    self.addEventListener('fetch', function (event) {
-      event.respondWith(
-        caches.match(event.request)
-          .then(function (response) {
-            if (response) {
-              return response;
-            }
-            return fetch(event.request);
-          }
-        )
-      );
-    });
-    navigator.serviceWorker.register('service-worker.js')
-  .then(function(registration) {
-    console.log('Service Worker registrado com sucesso:', registration);
-  })
-  .catch(function(error) {
-    console.log('Falha ao registrar o Service Worker:', error);
-  });
-
-    
-  </script>
 </body>
 </html>

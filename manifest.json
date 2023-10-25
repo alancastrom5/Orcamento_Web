@@ -15,3 +15,276 @@
     ]
   }
   
+  <!DOCTYPE html>
+<html>
+<head>
+  <title>Orçamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.4.3/jspdf.plugin.autotable.js"></script>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    img {
+      margin-bottom: 10px;
+    }
+
+    body {
+      background-color: Gainsboro;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #orcamentoForm {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Estilos para dispositivos móveis */
+    @media (max-width: 600px) {
+      body {
+        font-size: 16px;
+        /* Ajuste o tamanho da fonte para dispositivos móveis */
+      }
+
+      label,
+      input {
+        text-align: left;
+        /* Alinhe os rótulos e campos de entrada à esquerda */
+      }
+
+      #orcamentoForm {
+        position: relative;
+        margin-top: 20px;
+        /* Espaçamento superior para dispositivos móveis */
+      }
+
+      h1 {
+        font-size: 24px;
+        /* Ajuste o tamanho da fonte para dispositivos móveis */
+        text-align: center;
+        /* Centralize o título */
+      }
+
+      label,
+      input,
+      button {
+        width: 70%;
+        /* Faça os elementos ocuparem a largura total */
+      }
+
+      label {
+        margin-bottom: 5px;
+        /* Adicione espaço entre os rótulos */
+      }
+
+      input,
+      button {
+        padding: 10px;
+        /* Adicione espaço interno aos elementos de entrada e botão */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Orçamento</h1>
+  <form id="orcamentoForm">
+    <img src="transferir.png" alt="Logo da empresa">
+    <label for="cliente">Cliente:</label>
+    <input type="text" id="cliente" name="cliente"><br><br>
+
+    <label for="telefone">Telefone:</label>
+    <input type="text" id="telefone" name="telefone"><br><br>
+
+    <label for="cpf">CPF:</label>
+    <input type="text" id="cpf" name="cpf"><br><br>
+    
+    <label for="endereco">Endereço:</label>
+    <input type="text" id="endereco" name="endereco"><br><br>
+
+    <label for="cidade">Cidade:</label>
+    <input type="text" id="cidade" name="cidade"><br><br>
+
+    <label for="numero_orcamento">Número do orçamento:</label>
+    <input type="text" id="numero_orcamento" name="numero_orcamento"><br><br>
+
+    <label for="servico">Tipo de Serviço (separados por vírgula):</label>
+    <input type="text" id="servico" name="servico"><br><br>
+
+    <label for="data">Data:</label>
+    <input type="text" id="data" name="data"><br><br>
+
+    <label for="previsaoEntrega">Previsão de Entrega:</label>
+    <input type="text" id="previsaoEntrega" name="previsaoEntrega"><br><br>
+
+    <label for="desconto">Desconto:</label>
+    <input type="text" id="desconto" name="desconto"><br><br>
+    
+    <label for="valorTotal">Valor Total:</label>
+    <input type="text" id="valorTotal" name="valorTotal"><br><br>
+
+    <button type="submit">Gerar Orçamento</button>
+  </form>
+
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    document.getElementById('orcamentoForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const cliente = document.getElementById('cliente').value;
+      const telefone = document.getElementById('telefone').value;
+      const cpf = document.getElementById('cpf').value;
+      const endereco = document.getElementById('endereco').value;
+      const cidade = document.getElementById('cidade').value;
+      const numero_orcamento = document.getElementById('numero_orcamento').value;
+      const servico = document.getElementById('servico').value;
+      const previsaoEntrega = document.getElementById('previsaoEntrega').value;
+      const data = document.getElementById('data').value;
+      const valorTotal = document.getElementById('valorTotal').value;
+      const desconto = document.getElementById('desconto').value;
+
+      // Crie uma nova instância do jsPDF
+      const doc = new jsPDF();
+
+      // Defina o tamanho da fonte padrão
+      const fontSizePadrao = 12;
+
+      // Aumente a fonte para um local específico
+      const fontSizeAumentado = 18;
+
+      // Adicione a imagem do logotipo ao PDF
+      const logo = new Image();
+      logo.src = 'transferir.png'; // Substitua pelo caminho do seu logotipo
+      doc.addImage(logo, 'PNG', 10, 10, 50, 30); // Ajuste as coordenadas e o tamanho conforme necessário
+
+      // Posicione o texto com base no "top" da página
+      doc.setFontSize(fontSizeAumentado);
+      const topPosition = 30; // Ajuste a posição vertical conforme necessário
+      doc.text('ORÇAMENTO DE SERVIÇO', 70, topPosition);
+
+      // Adicione as datas ao PDF
+      doc.setFontSize(fontSizePadrao);
+      if (previsaoEntrega) {
+        doc.text(`Previsão de Entrega: ${previsaoEntrega}`, 140, topPosition + 20);
+      }
+      if (data) {
+        doc.text(`Data: ${data}`, 140, topPosition + 15);
+      }
+
+      // Adicione informações fixas abaixo da imagem
+      doc.text('Telefone/ Whatsapp: (11) 96355-4963', 10, topPosition + 20); // // Primeira linha
+      if (telefone) {
+        doc.text(`Telefone: ${telefone}`, 10, topPosition + 58); // Segunda linha
+      }
+      if (cpf) {
+        doc.text(`CPF: ${cpf}`, 10, topPosition + 50); // Terceira linha
+      }
+      if (endereco) {
+        doc.text(`Endereço: ${endereco}`, 10, topPosition + 66); // Quarta linha
+      }
+      if (cidade) {
+        doc.text(`Estado: ${cidade}`, 140, topPosition + 60); // Quarta linha
+      }
+      if (numero_orcamento) {
+        doc.text(`Número do orçamento: ${numero_orcamento}`, 140, topPosition + 50); // Quarta linha
+      }
+      
+      if (valorTotal) {
+        doc.text(`Valor Total: R$ ${valorTotal}`, 150, topPosition + 235); // Sexta linha
+      }
+      
+      if (desconto) {
+        doc.text(`Desconto: R$ ${desconto}`, 150, topPosition + 230); // Quinta linha
+      }
+
+      doc.text(`Cliente: ${cliente}`, 10, topPosition + 42);
+      // Divida a string de serviço em um array de serviços
+
+      doc.setFontSize(fontSizeAumentado);
+      const servicos = servico.split(',');
+      const tableX = 10; // Posição X inicial da tabela
+      const tableY = topPosition + 100; // Posição Y inicial da tabela
+      
+      const columns = ['Serviço', 'Quantidade'];
+      
+      const rows = [];
+      
+      for (let i = 0; i < servicos.length; i++) {
+        const service = servicos[i].trim();
+      
+        if (service) {
+          const parts = service.split(',');
+      
+          const serviceName = parts[0] || '';
+          const quantity = parts[1] || '';
+      
+          rows.push([serviceName, quantity]);
+        }
+      }
+      
+      doc.setFontSize(fontSizeAumentado);
+      doc.text('Serviços:', 10, topPosition + 90);
+      
+      doc.autoTable({
+        startY: topPosition + 100,
+        head: [columns],
+        body: rows,
+        theme: 'grid',
+        columnStyles: {
+          0: { cellWidth: 120 },
+          1: { cellWidth: 40 },
+        },
+      });
+      
+      doc.save('orcamento.pdf');
+    });
+
+  </script>
+
+  <script type="text/javascript">
+    const CACHE_NAME = 'orcamento-app-cache-v1';
+    const urlsToCache = [
+      'index.html',
+      'transferir.png', // Inclua todos os recursos que você deseja armazenar em cache aqui
+      // Adicione mais URLs de recursos que seu aplicativo usa
+    ];
+    
+    self.addEventListener('install', function (event) {
+      event.waitUntil(
+        caches.open(CACHE_NAME)
+          .then(function (cache) {
+            return cache.addAll(urlsToCache);
+          })
+      );
+    });
+    
+    self.addEventListener('fetch', function (event) {
+      event.respondWith(
+        caches.match(event.request)
+          .then(function (response) {
+            if (response) {
+              return response;
+            }
+            return fetch(event.request);
+          }
+        )
+      );
+    });
+    navigator.serviceWorker.register('service-worker.js')
+  .then(function(registration) {
+    console.log('Service Worker registrado com sucesso:', registration);
+  })
+  .catch(function(error) {
+    console.log('Falha ao registrar o Service Worker:', error);
+  });
+
+    
+  </script>
+</body>
+</html>
