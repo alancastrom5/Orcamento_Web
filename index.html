@@ -4,6 +4,8 @@
   <title>Orçamento</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="manifest" href="manifest.json">
+
   <style>
     img {
       margin-bottom: 10px;
@@ -205,6 +207,38 @@
   </script>
 
   <script type="text/javascript">
+    
+    const CACHE_NAME = 'orcamento-app-cache-v1';
+const urlsToCache = [
+  'index.html',
+  'transferir.png', // Imagem do logotipo
+  // Liste todos os recursos que você deseja armazenar em cache aqui
+];
+
+self.addEventListener('install', function (event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function (cache) {
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+self.addEventListener('fetch', function (event) {
+  event.respondWith(
+    caches.match(event.request)
+      .then(function (response) {
+        // Cache hit - retornar a resposta do cache
+        if (response) {
+          return response;
+        }
+        // Não há no cache - buscar a solicitação da rede
+        return fetch(event.request);
+      }
+    )
+  );
+});
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
         .then(function(registration) {
