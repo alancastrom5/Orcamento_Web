@@ -212,13 +212,13 @@
       }
       
       doc.setFontSize(fontSizeAumentado);
-      doc.text('Serviços:', 10, topPosition + 90);
+      doc.text('Serviços:', 10, topPosition + 120);
       
       doc.autoTable({
-        startY: topPosition + 100,
+        startY: topPosition + 130,
         head: [columns],
         body: rows,
-        theme: 'grid',
+        theme: 'striped',
         columnStyles: {
           0: { cellWidth: 120 },
         },
