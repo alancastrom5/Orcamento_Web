@@ -228,6 +228,44 @@
     });
 
   </script>
+  <script type="text/javascript">
+    const CACHE_NAME = 'orcamento-app-cache-v1';
+    const urlsToCache = [
+      'index.html',
+      'transferir.png', // Inclua todos os recursos que você deseja armazenar em cache aqui
+      // Adicione mais URLs de recursos que seu aplicativo usa
+    ];
+    
+    self.addEventListener('install', function (event) {
+      event.waitUntil(
+        caches.open(CACHE_NAME)
+          .then(function (cache) {
+            return cache.addAll(urlsToCache);
+          })
+      );
+    });
+    
+    self.addEventListener('fetch', function (event) {
+      event.respondWith(
+        caches.match(event.request)
+          .then(function (response) {
+            if (response) {
+              return response;
+            }
+            return fetch(event.request);
+          }
+        )
+      );
+    });
+    navigator.serviceWorker.register('service-worker.js')
+  .then(function(registration) {
+    console.log('Service Worker registrado com sucesso:', registration);
+  })
+  .catch(function(error) {
+    console.log('Falha ao registrar o Service Worker:', error);
+  });
 
+    
+  </script>
 </body>
 </html>
